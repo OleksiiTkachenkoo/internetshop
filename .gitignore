@@ -13,6 +13,10 @@ hs_err_pid*
 ## Maven
 ##############################
 target/
+*/target/**
+.classpath
+.project
+.settings/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
