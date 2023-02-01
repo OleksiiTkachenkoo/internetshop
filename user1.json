@@ -1,0 +1,18 @@
+{
+  "id" : 1,
+  "firstName" : "Alex",
+  "lastName" : "Yo",
+  "phone" : "+380934987349",
+  "password" : "okefkewe324",
+  "email" : "so3@gmail.com",
+  "age" : 23,
+  "address" : {
+    "id" : 1,
+    "country" : "Ukraine",
+    "city" : "Kyiv",
+    "street" : "Kyrilenko 23",
+    "apartment" : "27",
+    "idUser" : 1,
+    "idShipment" : 2
+  }
+}

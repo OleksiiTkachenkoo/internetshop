@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <id>1</id>
+    <firstName>Alex</firstName>
+    <lastName>Yo</lastName>
+    <phone>+380934987349</phone>
+    <password>okefkewe324</password>
+    <email>so3@gmail.com</email>
+    <age>23</age>
+    <address>
+        <id>1</id>
+        <country>Ukraine</country>
+        <city>Kyiv</city>
+        <street>Kyrilenko 23</street>
+        <apartment>27</apartment>
+        <idUser>1</idUser>
+        <idShipment>2</idShipment>
+    </address>
+</user>

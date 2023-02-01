@@ -12,8 +12,7 @@ hs_err_pid*
 ##############################
 ## Maven
 ##############################
-target/
-*/target/**
+
 .classpath
 .project
 .settings/
@@ -47,6 +46,8 @@ out/
 *.iml
 *.ipr
 *.iws
+target/
+*/target/**
 
 ##############################
 ## Eclipse

@@ -1,0 +1,27 @@
+{
+  "id" : 1,
+  "firstName" : "Alex",
+  "lastName" : "Drake",
+  "phone" : "+380933839249",
+  "password" : "SD{PK33030-",
+  "email" : "drake3@gmail.com",
+  "address" :
+      {
+        "city" : "Kyiv",
+        "country" : "Ukraine"
+      },
+  "age" : 33,
+
+  "id" : 2,
+  "firstName" : "Olga",
+  "lastName" : "Kotenko",
+  "phone" : "+380974935773",
+  "password" : "aaaakkkslk399885kkkdlklls;-",
+  "email" : "kotik21@gmail.com",
+  "address" :
+  {
+    "city" : "Lviv",
+    "country" : "Ukraine"
+  },
+  "age" : 21
+}

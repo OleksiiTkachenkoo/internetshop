@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding= "UTF-8"?>
+
+<user xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <id>12</id>
+    <name>Tetsu</name>
+    <lastName>Inoue</lastName>
+    <phone>+380934599573</phone>
+    <password>JPIJpk334okpok</password>
+    <email>tetsu37@gmail.com</email>
+    <age>55</age>
+    <address>
+        <city>Kioto</city>
+        <country>Japan</country>
+    </address>
+
+    <id>11</id>
+    <name>William</name>
+    <lastName>Bassinski</lastName>
+    <phone>+380973878920</phone>
+    <password>jkkjkdlp837874)</password>
+    <email>bassinski@gmail.com</email>
+    <age>61</age>
+    <address>
+        <city>Los Angeles</city>
+        <country>Usa</country>
+    </address>
+</user>

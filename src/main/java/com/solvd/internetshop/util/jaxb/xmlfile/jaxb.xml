@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding= "UTF-8"?>
+
+<user>
+    <id>12</id>
+    <firstName>Tetsu</firstName>
+    <lastName>Inoue</lastName>
+    <phone>+380934599573</phone>
+    <password>JPIJpk334okpok</password>
+    <email>tetsu37@gmail.com</email>
+    <age>55</age>
+    <address>
+        <city>Kioto</city>
+        <country>Japan</country>
+    </address>
+</user>
