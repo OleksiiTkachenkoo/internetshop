@@ -10,23 +10,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class JaxBMarshall {
-    public static void main(String[] args) {
 
-
-        User user = new User(1, "Alex", "Yo",
-                "+380934987349", "okefkewe324", "so3@gmail.com", 23,
-                new Address(1, "Ukraine", "Kyiv", "Kyrilenko 23", "27", 1, 2));
-
+        public static <T> void marshall(T t) {
 
             try {
-                Marshaller marshaller = JAXBContext.newInstance(User.class).createMarshaller();
 
+                Marshaller marshaller = JAXBContext.newInstance(t.getClass()).createMarshaller();
                 FileOutputStream file = new FileOutputStream("userMarshaller.xml");
+
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                marshaller.marshal(user, file);
-                marshaller.marshal(user, System.out);
+                marshaller.marshal(t, file);
+                marshaller.marshal(t, System.out);
             } catch (JAXBException | FileNotFoundException e) {
                 e.printStackTrace();
             }
-    }
+        }
 }

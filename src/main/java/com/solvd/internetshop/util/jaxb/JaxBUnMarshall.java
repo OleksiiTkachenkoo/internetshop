@@ -12,14 +12,15 @@ public class JaxBUnMarshall {
 
        private static File file = new File("src/main/java/com/solvd/internetshop/util/jaxb/xmlfile/jaxb.xml");
 
-       public static void unMarshall() {
+       public static <T> T unMarshall(T  t) {
            try {
-               Unmarshaller unmarshaller = JAXBContext.newInstance(User.class).createUnmarshaller();
-               User user  = (User) unmarshaller.unmarshal(file);
-               System.out.println(user.toString());
+               Unmarshaller unmarshaller = JAXBContext.newInstance(t.getClass()).createUnmarshaller();
+               t = (T) unmarshaller.unmarshal(file);
+               System.out.println(t.toString());
            } catch (JAXBException e) {
                e.printStackTrace();
            }
+           return t;
        }
 }
 
