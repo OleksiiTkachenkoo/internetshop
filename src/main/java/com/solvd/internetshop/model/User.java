@@ -1,20 +1,63 @@
 package com.solvd.internetshop.model;
 
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+
 import java.util.Objects;
 
+
+
+@XmlRootElement
+@XmlType(name = "user", propOrder = {
+        "id",
+        "firstName",
+        "lastName",
+        "phone",
+        "password",
+        "email",
+        "age",
+        "address"
+})
 public class User {
 
+
     private int id;
+
+
     private String firstName;
+
+
     private String lastName;
+
+
     private String phone;
+
+
     private String password;
+
+
     private String email;
+
     private int age;
 
-
+    private Address address;
 
     public User(){}
+
+    public User(int id, String firstName, String lastName,
+                String phone, String password, String email, int age, Address address) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.password = password;
+        this.email = email;
+        this.age = age;
+        this.address = address;
+    }
 
     public User(int id, String firstName, String lastName,
                 String phone, String password, String email, int age) {
@@ -37,6 +80,15 @@ public class User {
         this.age = age;
     }
 
+
+    public Address getAddress() {
+        return address;
+    }
+
+    @XmlElement(required = true)
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -68,6 +120,7 @@ public class User {
         return age;
     }
 
+    @XmlElement(required = true)
     public void setAge(int age) {
         this.age = age;
     }
@@ -76,6 +129,7 @@ public class User {
         return id;
     }
 
+    @XmlElement(required = true)
     public void setId(int id) {
         this.id = id;
     }
@@ -84,6 +138,7 @@ public class User {
         return firstName;
     }
 
+    @XmlElement(required = true)
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -92,6 +147,7 @@ public class User {
         return lastName;
     }
 
+    @XmlElement(required = true)
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -100,6 +156,7 @@ public class User {
         return phone;
     }
 
+    @XmlElement(required = true)
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -108,6 +165,7 @@ public class User {
         return password;
     }
 
+    @XmlElement(required = true)
     public void setPassword(String password) {
         this.password = password;
     }
@@ -116,6 +174,7 @@ public class User {
         return email;
     }
 
+    @XmlElement(required = true)
     public void setEmail(String email) {
         this.email = email;
     }

@@ -6,10 +6,7 @@ import com.solvd.internetshop.model.Account;
 import com.solvd.internetshop.model.UserRole;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,19 @@ public class AccountDaoImpl implements IAccountDao {
 
                 account =  new Account(id, idUser, idUserRole);
             }
+            /*
+            Connection connection = ConnectionUtil.getConnection();
+                PreparedStatement statement
+                        = connection.prepareStatement(insertOrderQuery,
+                        Statement.RETURN_GENERATED_KEYS)) {
+            statement.setLong(1, order.getUserId());
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            order.setId(resultSet.getLong(1));
+            statement.close();
+            insertOrdersProducts(order, connection);
+             */
 
             resultSet.close();
             return account;
@@ -50,12 +60,23 @@ public class AccountDaoImpl implements IAccountDao {
     }
 
     @Override
-    public void setEntity(Account account) {
+    public void insertEntity(Account account) {
 
     }
 
     @Override
     public void updateEntity(Account account) {
+        String query = "UPDATE Account SET idUser= ? WHERE id= ?";
+
+        try(Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, account.getIdUser());
+            preparedStatement.setInt(2, account.getId());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -71,7 +92,10 @@ public class AccountDaoImpl implements IAccountDao {
 
     public static void main(String[] args) {
         IAccountDao iAccountDao = new AccountDaoImpl();
-        Account account = iAccountDao.getEntityById(3);
+        Account account = iAccountDao.getEntityById(5);
+        System.out.println(account);
+        account.setIdUser(0);
+        iAccountDao.updateEntity(account);
         System.out.println(account);
 //        userRole.setRole("Customer");
 //        userRoleDaoImpl.updateEntity(userRole);

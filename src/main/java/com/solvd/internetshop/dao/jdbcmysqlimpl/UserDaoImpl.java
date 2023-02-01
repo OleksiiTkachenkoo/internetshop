@@ -51,7 +51,8 @@ public class UserDaoImpl implements IUserDao {
 
 
         @Override
-    public void setEntity(User user) {
+    public void insertEntity(User user) {
+
         String insertQuery =
                     "INSERT INTO User (firstName, lastName, phone, password, email, age)" +
                             " VALUES (?, ?, ?, ?, ?, ?)";

@@ -49,7 +49,7 @@ public class AddressDaoImpl implements IAddressDao {
     }
 
     @Override
-    public void setEntity(Address address) {
+    public void insertEntity(Address address) {
 
         String insertQuery =
                 "INSERT INTO Address (country, city, street, " +
@@ -135,5 +135,9 @@ public class AddressDaoImpl implements IAddressDao {
             e.printStackTrace();
         }
         return addresses;
+    }
+
+    public static void main(String[] args) {
+        
     }
 }

@@ -44,7 +44,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
     }
 
     @Override
-    public void setEntity(Invoice invoice) {
+    public void insertEntity(Invoice invoice) {
 
         String insertQuery = "INSERT INTO Invoice (invoiceDate, statusPaid) VALUE (?, ?)";
 

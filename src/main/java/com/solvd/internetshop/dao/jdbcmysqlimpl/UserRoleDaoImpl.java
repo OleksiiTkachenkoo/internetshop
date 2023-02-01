@@ -45,7 +45,7 @@ public class UserRoleDaoImpl implements IUserRoleDao {
     }
 
     @Override
-    public void setEntity(UserRole userRole) {
+    public void insertEntity(UserRole userRole) {
 
         String insertQuery =
                 "INSERT INTO UserRole (role) VALUE (?)";

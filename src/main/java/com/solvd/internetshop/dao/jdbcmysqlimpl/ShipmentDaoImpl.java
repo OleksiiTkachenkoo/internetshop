@@ -45,7 +45,7 @@ public class ShipmentDaoImpl implements IShipmentDao {
     }
 
     @Override
-    public void setEntity(Shipment shipment) {
+    public void insertEntity(Shipment shipment) {
 
         String insertQuery =
                 "INSERT INTO Shipment (status, transportName, date) VALUES (?, ?, ?)";

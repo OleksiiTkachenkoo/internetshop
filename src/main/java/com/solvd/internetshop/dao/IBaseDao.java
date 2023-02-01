@@ -2,7 +2,7 @@ package com.solvd.internetshop.dao;
 
 public interface IBaseDao<T> {
     T getEntityById(int id);
-    void setEntity(T t);
+    void insertEntity(T t);
     void updateEntity(T t);
     void removeEntityById(int id);
 }

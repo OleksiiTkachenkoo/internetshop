@@ -1,7 +1,20 @@
 package com.solvd.internetshop.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.Objects;
 
+@XmlRootElement
+@XmlType(name = "address", propOrder = {
+        "id",
+        "country",
+        "city",
+        "street",
+        "apartment",
+        "idUser",
+        "idShipment"
+})
 public class Address {
 
     private int id;
@@ -63,6 +76,7 @@ public class Address {
                 '}';
     }
 
+
     public int getId() {
         return id;
     }
@@ -75,6 +89,7 @@ public class Address {
         return country;
     }
 
+    @XmlElement(required = true)
     public void setCountry(String country) {
         this.country = country;
     }
@@ -83,6 +98,7 @@ public class Address {
         return city;
     }
 
+    @XmlElement(required = true)
     public void setCity(String city) {
         this.city = city;
     }
