@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.internetshop.dao.mybatis.mapper.IInvoiceMapper">
+    <resultMap type="Invoice" id="InvoiceResult">
+        <id property="id" column="id"/>
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="phone" column="phone"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="age" column="age"/>
+    </resultMap>
+    <select id="getAllInvoices" resultMap="InvoiceResult">
+        SELECT * FROM Invoice
+    </select>
+    <select id="getInvoiceById" parameterType="int" resultType="Invoice">
+        SELECT * FROM Invoice
+        WHERE id = #{id}
+    </select>
+    <insert id="insertInvoice" parameterType="Invoice">
+        INSERT INTO Invoice (invoiceDate, statusPaid)
+        VALUE (#{invoiceDate}, #{statusPaid})
+    </insert>
+    <delete id="removeInvoiceById" parameterType="int">
+        DELETE FROM Invoice
+        WHERE id=#{id}
+    </delete>
+    <update id="updateInvoice" parameterType="Invoice" useGeneratedKeys="true" keyProperty="id"  keyColumn="id" >
+        UPDATE Invoice
+        SET invoiceDate= #{invoiceDate}, statusPaid= #{statusPaid}
+        WHERE id= #{id}
+    </update>
+</mapper>

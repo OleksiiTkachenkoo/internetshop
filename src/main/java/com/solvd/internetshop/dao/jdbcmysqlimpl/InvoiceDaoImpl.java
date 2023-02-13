@@ -2,6 +2,7 @@ package com.solvd.internetshop.dao.jdbcmysqlimpl;
 
 import com.solvd.internetshop.dao.IInvoiceDao;
 import com.solvd.internetshop.model.Invoice;
+import com.solvd.internetshop.model.Shipment;
 
 
 import java.sql.*;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class InvoiceDaoImpl implements IInvoiceDao {
 
@@ -29,15 +31,14 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
             while(resultSet.next()) {
 
-                String invoiceDate = resultSet.getString("invoiceDate");
-                String statusPaid = resultSet.getString("statusPaid");
-                invoice =  new Invoice (id, invoiceDate, statusPaid);
+                invoice =  getInvoiceFromResultSet(resultSet);
             }
 
             resultSet.close();
             return invoice;
 
         } catch (SQLException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
 
@@ -57,7 +58,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
 
@@ -76,7 +77,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -92,7 +93,7 @@ public class InvoiceDaoImpl implements IInvoiceDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -107,14 +108,22 @@ public class InvoiceDaoImpl implements IInvoiceDao {
             ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                invoices.add(new Invoice(resultSet.getInt("id"),
-                                         resultSet.getString("invoiceDate"),
-                                         resultSet.getString("statusPaid")));
+
+                invoices.add(getInvoiceFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return invoices;
+    }
+
+    private Invoice getInvoiceFromResultSet(ResultSet resultSet) throws SQLException {
+        Invoice i = new Invoice();
+        i.setId(resultSet.getInt("id"));
+        i.setInvoiceDate(resultSet.getString("invoiceDate"));
+        i.setStatusPaid(resultSet.getString("statusPaid"));
+        return i;
     }
 
     public static void main(String[] args) {

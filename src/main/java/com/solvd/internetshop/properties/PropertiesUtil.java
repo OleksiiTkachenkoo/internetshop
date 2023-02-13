@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import java.util.Properties;
 
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
+
 public class PropertiesUtil {
 
     private static String PASSWORD;
@@ -23,13 +25,11 @@ public class PropertiesUtil {
         try (FileInputStream f =
                      new FileInputStream("./src/main/resources/dBConnection.properties")) {
             p.load(f);
-            URL = p.getProperty("db.url");
-            USER_NAME = p.getProperty("db.user_name");
-            PASSWORD = p.getProperty("db.password");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            URL = p.getProperty("dBConnection.url");
+            USER_NAME = p.getProperty("dBConnection.username");
+            PASSWORD = p.getProperty("dBConnection.password");
         } catch (IOException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
     }
 

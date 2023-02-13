@@ -1,6 +1,7 @@
 package com.solvd.internetshop.dao.jdbcmysqlimpl;
 
 import com.solvd.internetshop.dao.IProductDao;
+import com.solvd.internetshop.model.Account;
 import com.solvd.internetshop.model.Product;
 import com.solvd.internetshop.model.User;
 
@@ -9,68 +10,106 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class ProductDaoImpl implements IProductDao {
-
+    Product product = new Product();
     List<Product> products = new ArrayList<>();
 
     @Override
     public Product getEntityById(int id) {
-        return null;
+
+        String query = "SELECT * FROM Product WHERE id = ?";
+
+        try (
+                Connection connection = getApacheDbConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(query)
+        ) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+
+                product = getProductFromResultSet(resultSet);
+
+            }
+
+            resultSet.close();
+            return product;
+
+        } catch (SQLException e) {
+            myLogger().error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void insertEntity(Product product) {
 
         String insertQuery =
-                "INSERT INTO Product (title, price, categories, availability, quantity)" +
-                        " VALUES (?, ?, ?, ?, ?)";
+                "INSERT INTO Product (title, price, categories, idUser, idCart, availability, quantity)" +
+                        " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = getApacheDbConnection();
-             PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+        try (
+                Connection connection = getApacheDbConnection();
+                PreparedStatement preparedStatement = connection
+                        .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, product.getTitle());
             preparedStatement.setInt(2, product.getPrice());
             preparedStatement.setString(3, product.getCategories());
-//            preparedStatement.setInt(4, product.getIdOrder());
-//            preparedStatement.setInt(5, product.getIdCart());
+            preparedStatement.setInt(4, product.getIdUser());
+            preparedStatement.setInt(5, product.getIdCart());
             preparedStatement.setString(6, product.getAvailability());
             preparedStatement.setInt(7, product.getQuantity());
             preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
-            if(resultSet.next()) {
-                product.setId(resultSet.getInt(1));
-            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
-
-//        String insertProductQuery
-//                = "INSERT INTO products (name, price) VALUES (?, ?);";
-//        try (Connection connection = ConnectionUtil.getConnection();
-//             PreparedStatement statement =
-//                     connection.prepareStatement(insertProductQuery,
-//                             Statement.RETURN_GENERATED_KEYS)) {
-//            statement.setString(1, product.getName());
-//            statement.setDouble(2, product.getPrice());
-//            statement.executeUpdate();
-//            ResultSet resultSet = statement.getGeneratedKeys();
-//            if (resultSet.next()) {
-//                product.setId(resultSet.getLong(1));
-//            }
-//            return product;
     }
 
     @Override
     public void updateEntity(Product product) {
 
+        String query = "UPDATE Product SET firstName= ?, lastName= ?, " +
+                " phone= ?, password= ?, email= ?, age= ? WHERE id= ?";
+
+        try(Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, product.getTitle());
+            preparedStatement.setInt(2, product.getPrice());
+            preparedStatement.setString(3, product.getCategories());
+            preparedStatement.setInt(4, product.getIdUser());
+            preparedStatement.setInt(5, product.getIdCart());
+            preparedStatement.setString(6, product.getAvailability());
+            preparedStatement.setInt(7, product.getQuantity());
+
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            myLogger().error(e);
+        }
     }
 
     @Override
     public void removeEntityById(int id) {
 
+        String query = "DELETE FROM Product WHERE id= ?";
+
+        try(
+                Connection connection = getApacheDbConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            myLogger().error(e);
+        }
     }
 
 
@@ -84,21 +123,28 @@ public class ProductDaoImpl implements IProductDao {
             ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                products.add(new Product(resultSet.getInt("id"),
-                        resultSet.getString("title"),
-                        resultSet.getInt("price"),
-                        resultSet.getString("categories"),
-                        resultSet.getInt("idOrder"),
-                        resultSet.getInt("idCart"),
-                        resultSet.getString("availability"),
-                        resultSet.getInt("quantity")));
+
+                products.add(getProductFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return products;
     }
 
+    private Product getProductFromResultSet(ResultSet resultSet) throws SQLException {
+        Product p = new Product();
+        p.setId(resultSet.getInt("id"));
+        p.setTitle(resultSet.getString("title"));
+        p.setPrice(resultSet.getInt("price"));
+        p.setCategories(resultSet.getString("categories"));
+        p.setIdUser(resultSet.getInt("idUser"));
+        p.setIdCart(resultSet.getInt("idCart"));
+        p.setAvailability(resultSet.getString("availability"));
+        p.setQuantity(resultSet.getInt("quantity"));
+        return p;
+    }
 
     public static void main(String[] args) {
 

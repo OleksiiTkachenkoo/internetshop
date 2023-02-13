@@ -3,6 +3,7 @@ package com.solvd.internetshop.dao.jdbcmysqlimpl;
 
 
 import com.solvd.internetshop.dao.IUserRoleDao;
+import com.solvd.internetshop.model.User;
 import com.solvd.internetshop.model.UserRole;
 
 import java.sql.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class UserRoleDaoImpl implements IUserRoleDao {
 
@@ -31,8 +33,8 @@ public class UserRoleDaoImpl implements IUserRoleDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
 
-                String role = resultSet.getString("role");
-                userRole =  new UserRole (id, role);
+                userRole =  getUserRoleFromResultSet(resultSet);
+
             }
 
             resultSet.close();
@@ -58,7 +60,7 @@ public class UserRoleDaoImpl implements IUserRoleDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -75,7 +77,7 @@ public class UserRoleDaoImpl implements IUserRoleDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -91,7 +93,7 @@ public class UserRoleDaoImpl implements IUserRoleDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -106,13 +108,21 @@ public class UserRoleDaoImpl implements IUserRoleDao {
             ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                userRoles.add(new UserRole(resultSet.getInt("id"),
-                        resultSet.getString("role")));
+
+                userRoles.add(getUserRoleFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return userRoles;
+    }
+
+    private UserRole getUserRoleFromResultSet(ResultSet resultSet) throws SQLException {
+        UserRole u = new UserRole();
+        u.setId(resultSet.getInt("id"));
+        u.setRole(resultSet.getString("role"));
+        return u;
     }
 
     public static void main(String[] args) {

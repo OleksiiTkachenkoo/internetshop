@@ -3,6 +3,7 @@ package com.solvd.internetshop.dao.jdbcmysqlimpl;
 import com.solvd.internetshop.dao.ICartDao;
 
 import com.solvd.internetshop.model.Cart;
+import com.solvd.internetshop.model.Invoice;
 
 
 import java.sql.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class CartDaoImpl implements ICartDao {
 
@@ -29,16 +31,15 @@ public class CartDaoImpl implements ICartDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
 
-                String productItem = resultSet.getString("productItem");
-                String dateAdd = resultSet.getString("dateAdd");
+                cart =  getCartFromResultSet(resultSet);
 
-                cart =  new Cart (id, productItem, dateAdd);
             }
 
             resultSet.close();
             return cart;
 
         } catch (SQLException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -59,7 +60,7 @@ public class CartDaoImpl implements ICartDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
     }
 
@@ -75,7 +76,7 @@ public class CartDaoImpl implements ICartDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
     }
 
@@ -90,7 +91,7 @@ public class CartDaoImpl implements ICartDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
     }
 
@@ -105,14 +106,21 @@ public class CartDaoImpl implements ICartDao {
 
             while (resultSet.next()) {
 
-                carts.add(new Cart(resultSet.getInt("id"),
-                        resultSet.getString("productItem"),
-                        resultSet.getString("dateAdd")));
+                carts.add(getCartFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return carts;
+    }
+
+    private Cart getCartFromResultSet(ResultSet resultSet) throws SQLException {
+        Cart c = new Cart();
+        c.setId(resultSet.getInt("id"));
+        c.setProductItem(resultSet.getString("productItem"));
+        c.setDateAdd(resultSet.getString("dateAdd"));
+        return c;
     }
 
     public static void main(String[] args) {

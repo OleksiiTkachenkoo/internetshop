@@ -2,14 +2,14 @@ package com.solvd.internetshop.dao.jdbcmysqlimpl;
 
 import com.solvd.internetshop.dao.IAddressDao;
 import com.solvd.internetshop.model.Address;
-import com.solvd.internetshop.model.Invoice;
-import com.solvd.internetshop.model.Shipment;
+
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class AddressDaoImpl implements IAddressDao {
 
@@ -30,20 +30,15 @@ public class AddressDaoImpl implements IAddressDao {
 
             while(resultSet.next()) {
 
-                String country = resultSet.getString("country");
-                String city = resultSet.getString("city");
-                String street = resultSet.getString("street");
-                String apartment = resultSet.getString("apartment");
-                int idUser = resultSet.getInt("");
-                int idShipment = resultSet.getInt("idShipment");
+                address = getAddressFromResultSet(resultSet);
 
-                address = new Address(id, country, city, street, apartment, idUser, idShipment);
             }
 
             resultSet.close();
             return address;
 
         } catch (SQLException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -92,7 +87,7 @@ public class AddressDaoImpl implements IAddressDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -108,7 +103,7 @@ public class AddressDaoImpl implements IAddressDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -123,18 +118,26 @@ public class AddressDaoImpl implements IAddressDao {
             ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                addresses.add(new Address(resultSet.getInt("id"),
-                                          resultSet.getString("country"),
-                                          resultSet.getString("city"),
-                                          resultSet.getString("street"),
-                                          resultSet.getString("apartment"),
-                                          resultSet.getInt("idUser"),
-                                          resultSet.getInt("idShipment")));
+
+                addresses.add(getAddressFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return addresses;
+    }
+
+    private Address getAddressFromResultSet(ResultSet resultSet) throws SQLException {
+        Address a = new Address();
+        a.setId(resultSet.getInt("id"));
+        a.setCountry(resultSet.getString("country"));
+        a.setCity(resultSet.getString("city"));
+        a.setStreet(resultSet.getString("street"));
+        a.setApartment(resultSet.getString("apartment"));
+        a.setIdUser(resultSet.getInt("idUser"));
+        a.setIdShipment(resultSet.getInt("idShipment"));
+        return a;
     }
 
     public static void main(String[] args) {

@@ -7,26 +7,22 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.IOException;
 import java.io.Reader;
 
-public class MyBatisUtil
-{
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
+
+public class MyBatisUtil {
     private static SqlSessionFactory factory;
 
     private MyBatisUtil() {
     }
 
-    static {
+    public static SqlSessionFactory getSqlSessionFactory() {
         Reader reader = null;
         try {
             reader = Resources.getResourceAsReader("mybatis-config.xml");
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            myLogger().error(e);
         }
         factory = new SqlSessionFactoryBuilder().build(reader);
-    }
-
-    public static SqlSessionFactory getSqlSessionFactory() {
         return factory;
     }
 }
-
-

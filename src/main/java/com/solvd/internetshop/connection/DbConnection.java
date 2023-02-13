@@ -35,34 +35,6 @@ public class DbConnection {
             throw new RuntimeException(e);
         }
     }
-
-
-    public static Connection getDbConnection() {
-
-        try {
-            if (connection != null) {
-                return connection;
-            }
-
-            connection = DriverManager.getConnection(getURL(), getUserName(), getPASSWORD());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return connection;
-  }
-
-
-    public static void main(String[] args) {
-
-    }
-
 }
 
 

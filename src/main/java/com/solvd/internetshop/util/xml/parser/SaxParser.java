@@ -70,7 +70,6 @@ public class SaxParser {
                 public void characters(char ch[], int start, int end) {
                     if (name) {
                         String charName = new String(ch, start, end);
-                        if (charName != null)
                         concat = charName;
                         name = false;
                     }

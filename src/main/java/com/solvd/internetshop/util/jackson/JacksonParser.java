@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
+
 public class JacksonParser {
 
     private static ObjectMapper objectMapper(){
@@ -23,6 +25,7 @@ public class JacksonParser {
         try {
             return objectMapper().readTree(file);
         } catch (IOException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -31,6 +34,7 @@ public class JacksonParser {
         try {
             return objectMapper().treeToValue(node, clazz);
         } catch (JsonProcessingException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -40,6 +44,7 @@ public class JacksonParser {
             objectMapper().writerWithDefaultPrettyPrinter()
                     .writeValue(new File(fileName), obj);
         } catch (IOException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -48,6 +53,7 @@ public class JacksonParser {
         try {
             return objectMapper().readValue(file, clazz);
         } catch (IOException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -59,6 +65,7 @@ public class JacksonParser {
                             .writeValueAsString(obj);
             return jsonString;
         } catch (JsonProcessingException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }

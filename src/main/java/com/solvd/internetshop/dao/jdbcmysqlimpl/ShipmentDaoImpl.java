@@ -2,6 +2,7 @@ package com.solvd.internetshop.dao.jdbcmysqlimpl;
 
 import com.solvd.internetshop.dao.IShipmentDao;
 import com.solvd.internetshop.model.Shipment;
+import com.solvd.internetshop.model.UserRole;
 
 
 import java.sql.*;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class ShipmentDaoImpl implements IShipmentDao {
 
@@ -30,16 +32,15 @@ public class ShipmentDaoImpl implements IShipmentDao {
 
             while(resultSet.next()) {
 
-                String status = resultSet.getString("status");
-                String transportName = resultSet.getString("transportName");
-                String date = resultSet.getString("date");
-                shipment = new Shipment (id, status, transportName, date);
+                shipment = getShipmentFromResultSet(resultSet);
+
             }
 
             resultSet.close();
             return shipment;
 
         } catch (SQLException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
     }
@@ -60,7 +61,7 @@ public class ShipmentDaoImpl implements IShipmentDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -80,7 +81,7 @@ public class ShipmentDaoImpl implements IShipmentDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -96,7 +97,7 @@ public class ShipmentDaoImpl implements IShipmentDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -111,16 +112,24 @@ public class ShipmentDaoImpl implements IShipmentDao {
             ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
-                shipments.add(new Shipment(resultSet.getInt("id"),
-                                           resultSet.getString("status"),
-                                           resultSet.getString("transportName"),
-                                           resultSet.getString("date")));
+
+                shipments.add(getShipmentFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return shipments;
 
+    }
+
+    private Shipment getShipmentFromResultSet(ResultSet resultSet) throws SQLException {
+        Shipment s = new Shipment();
+        s.setId(resultSet.getInt("id"));
+        s.setStatus(resultSet.getString("status"));
+        s.setTransportName(resultSet.getString("transportName"));
+        s.setDate(resultSet.getString("date"));
+        return s;
     }
 
     public static void main(String[] args) {

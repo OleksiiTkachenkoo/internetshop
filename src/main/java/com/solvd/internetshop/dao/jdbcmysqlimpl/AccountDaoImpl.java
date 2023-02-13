@@ -1,9 +1,8 @@
 package com.solvd.internetshop.dao.jdbcmysqlimpl;
 
 import com.solvd.internetshop.dao.IAccountDao;
-import com.solvd.internetshop.dao.IUserRoleDao;
 import com.solvd.internetshop.model.Account;
-import com.solvd.internetshop.model.UserRole;
+
 
 
 import java.sql.*;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 public class AccountDaoImpl implements IAccountDao {
 
@@ -24,36 +24,23 @@ public class AccountDaoImpl implements IAccountDao {
 
         String query = "SELECT * FROM Account WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
 
-                int idUser = resultSet.getInt("idUser");
-                int idUserRole = resultSet.getInt("idUserRole");
-
-                account =  new Account(id, idUser, idUserRole);
+                account =  getAccountFromResultSet(resultSet);
             }
-            /*
-            Connection connection = ConnectionUtil.getConnection();
-                PreparedStatement statement
-                        = connection.prepareStatement(insertOrderQuery,
-                        Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, order.getUserId());
-            statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next();
-            order.setId(resultSet.getLong(1));
-            statement.close();
-            insertOrdersProducts(order, connection);
-             */
 
             resultSet.close();
             return account;
 
         } catch (SQLException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
 
@@ -61,11 +48,27 @@ public class AccountDaoImpl implements IAccountDao {
 
     @Override
     public void insertEntity(Account account) {
+        String insertQuery =
+                "INSERT INTO Account (idUser, idUserRole) VALUES (?, ?)";
 
+        try (
+             Connection connection = getApacheDbConnection();
+             PreparedStatement preparedStatement = connection
+                     .prepareStatement(insertQuery)
+        ) {
+
+            preparedStatement.setInt(1, account.getIdUser());
+            preparedStatement.setInt(2, account.getIdUserRole());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateEntity(Account account) {
+
         String query = "UPDATE Account SET idUser= ? WHERE id= ?";
 
         try(Connection connection = getApacheDbConnection();
@@ -75,7 +78,7 @@ public class AccountDaoImpl implements IAccountDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -83,25 +86,54 @@ public class AccountDaoImpl implements IAccountDao {
     @Override
     public void removeEntityById(int id) {
 
+        String query = "DELETE FROM Account WHERE id= ?";
+
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            myLogger().error(e);
+        }
     }
 
     @Override
     public List<Account> getAllAccounts() {
-        return null;
+
+        String query = "SELECT * FROM Account";
+
+        try(
+            Connection connection = getApacheDbConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
+
+            while (resultSet.next()) {
+
+                accounts.add(getAccountFromResultSet(resultSet));
+
+            }
+        } catch (SQLException e) {
+            myLogger().error(e);
+        }
+        return accounts;
+    }
+
+    private Account getAccountFromResultSet(ResultSet resultSet) throws SQLException {
+        Account a = new Account();
+        a.setId(resultSet.getInt("id"));
+        a.setIdUser(resultSet.getInt("idUser"));
+        a.setIdUserRole(resultSet.getInt("idUserRole"));
+        return a;
     }
 
     public static void main(String[] args) {
         IAccountDao iAccountDao = new AccountDaoImpl();
         Account account = iAccountDao.getEntityById(5);
         System.out.println(account);
-        account.setIdUser(0);
-        iAccountDao.updateEntity(account);
-        System.out.println(account);
-//        userRole.setRole("Customer");
-//        userRoleDaoImpl.updateEntity(userRole);
-//        userRoleDaoImpl.setEntity(new UserRole("SomeBody"));
-//        userRoleDaoImpl.removeEntityById(10);
-
 
 //        List<Account> accounts = iAccountDao.getAllAccounts();
 //        System.out.println(accounts);

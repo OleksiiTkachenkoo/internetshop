@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.internetshop.dao.mybatis.mapper.IUserMapper">
+    <resultMap type="User" id="UserResult">
+        <id property="id" column="id"/>
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="phone" column="phone"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="age" column="age"/>
+    </resultMap>
+    <select id="getAllUsers" resultMap="UserResult">
+        SELECT * FROM User
+    </select>
+    <select id="getUserById" parameterType="int" resultType="User">
+        SELECT id, firstName, lastName, phone, password, email, age
+        FROM User
+        WHERE id=#{id}
+    </select>
+    <insert id="insertUser" parameterType="User">
+        INSERT INTO User(firstName,lastName,phone,password, email,age)
+        VALUES(#{firstName},#{lastName},#{phone},#{password},#{email},#{age})
+    </insert>
+    <delete id="removeUserById" parameterType="int">
+        DELETE FROM User
+        WHERE id=#{id}
+    </delete>
+    <update id="updateUser" parameterType="User" useGeneratedKeys="true" keyProperty="id"  keyColumn="id" >
+        UPDATE User
+        SET firstName= #{firstName},
+        lastName= #{lastName},
+        phone= #{phone},
+        password= #{password},
+        email= #{email},
+        age= #{age}
+        WHERE id= #{id};
+    </update>
+</mapper>

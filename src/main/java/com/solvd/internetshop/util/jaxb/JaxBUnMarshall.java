@@ -7,6 +7,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
+
 
 public class JaxBUnMarshall {
 
@@ -18,7 +20,7 @@ public class JaxBUnMarshall {
                t = (T) unmarshaller.unmarshal(file);
                System.out.println(t.toString());
            } catch (JAXBException e) {
-               e.printStackTrace();
+               myLogger().error(e);
            }
            return t;
        }

@@ -1,19 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE configuration
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <properties resource="dBConnection.properties"/>
+    <typeAliases>
+        <typeAlias type="com.solvd.internetshop.model.User" alias="User"/>
+        <typeAlias type="com.solvd.internetshop.model.UserRole" alias="UserRole"/>
+        <typeAlias type="com.solvd.internetshop.model.Address" alias="Address"/>
+        <typeAlias type="com.solvd.internetshop.model.Invoice" alias="Invoice"/>
+    </typeAliases>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/internetshop"/>
-                <property name="username" value="root"/>
-                <property name="password" value="ab4884ab"/>
+                <property name="driver" value="${dBConnection.driverClassName}"/>
+                <property name="url" value="${dBConnection.url}"/>
+                <property name="username" value="${dBConnection.username}"/>
+                <property name="password" value="${dBConnection.password}"/>
             </dataSource>
         </environment>
     </environments>
     <mappers>
-        <mapper class="dao.mybatis.mapper.IUserMapper"/>
+        <mapper resource="user-mapper.xml"/>
+        <mapper resource="user_role-mapper.xml"/>
+        <mapper resource="address-mapper.xml"/>
+        <mapper resource="invoice-mapper.xml"/>
     </mappers>
 </configuration>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.internetshop.dao.mybatis.mapper.IAddressMapper">
+    <resultMap type="Address" id="AddressResult">
+        <id property="id" column="id"/>
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="phone" column="phone"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="age" column="age"/>
+    </resultMap>
+    <select id="getAllAddresses" resultMap="AddressResult">
+        SELECT * FROM Address
+    </select>
+    <select id="getAddressById" parameterType="int" resultType="Address">
+        SELECT * FROM Address
+        WHERE id = #{id}
+    </select>
+    <insert id="insertAddress" parameterType="Address">
+        INSERT INTO Address (country, city, street, apartment, idUser, idShipment)
+        VALUES (#{country}, #{city}, #{street}, #{apartment}, #{idUser}, #{idShipment})
+    </insert>
+    <delete id="removeAddressById" parameterType="int">
+        DELETE FROM Address
+        WHERE id=#{id}
+    </delete>
+    <update id="updateAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="id"  keyColumn="id" >
+        UPDATE Address
+        SET country= #{country}, city= #{city}, street= #{street}, apartment= #{apartment}, idUser= #{idUser}, idShipment= #{idShipment}
+        WHERE id= #{id}
+    </update>
+</mapper>

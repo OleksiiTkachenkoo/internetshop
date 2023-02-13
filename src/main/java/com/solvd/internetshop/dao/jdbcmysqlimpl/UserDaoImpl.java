@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.solvd.internetshop.connection.DbConnection.getApacheDbConnection;
+import static com.solvd.internetshop.logger.MyLogger.myLogger;
 
 
 public class UserDaoImpl implements IUserDao {
@@ -24,21 +25,18 @@ public class UserDaoImpl implements IUserDao {
 
         String query = "SELECT * FROM User WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+            Connection connection = getApacheDbConnection();
             PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
 
-                String firstName = resultSet.getString("firstName");
-                String lastName = resultSet.getString("lastName");
-                String phone = resultSet.getString("phone");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                int age = resultSet.getInt("age");
+            if(resultSet.next()) {
 
-                user =  new User (id, firstName, lastName, phone, password, email, age);
+                user = getUserFromResultSet(resultSet);
+
             }
 
             resultSet.close();
@@ -50,16 +48,18 @@ public class UserDaoImpl implements IUserDao {
     }
 
 
-        @Override
+    @Override
     public void insertEntity(User user) {
 
         String insertQuery =
                     "INSERT INTO User (firstName, lastName, phone, password, email, age)" +
                             " VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+            Connection connection = getApacheDbConnection();
             PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery)) {
+                     .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -70,7 +70,7 @@ public class UserDaoImpl implements IUserDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-                e.printStackTrace();
+            myLogger().error(e);
         }
     }
 
@@ -80,8 +80,10 @@ public class UserDaoImpl implements IUserDao {
         String query = "UPDATE User SET firstName= ?, lastName= ?, " +
                                       " phone= ?, password= ?, email= ?, age= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getPhone());
@@ -92,7 +94,7 @@ public class UserDaoImpl implements IUserDao {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
 
     }
@@ -102,13 +104,15 @@ public class UserDaoImpl implements IUserDao {
 
         String query = "DELETE FROM User WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
     }
 
@@ -117,34 +121,52 @@ public class UserDaoImpl implements IUserDao {
 
         String query = "SELECT * FROM User";
 
-        try(Connection connection = getApacheDbConnection();
+        try(
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
-                users.add(new User(resultSet.getInt("id"),
-                                   resultSet.getString("firstName"),
-                                   resultSet.getString("lastName"),
-                                   resultSet.getString("phone"),
-                                   resultSet.getString("password"),
-                                   resultSet.getString("email"),
-                                   resultSet.getInt("age")));
+                users.add(getUserFromResultSet(resultSet));
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLogger().error(e);
         }
         return users;
     }
 
+    private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+        User u = new User();
+        u.setId(resultSet.getInt("id"));
+        u.setFirstName(resultSet.getString("firstName"));
+        u.setLastName(resultSet.getString("lastName"));
+        u.setPhone(resultSet.getString("phone"));
+        u.setPassword(resultSet.getString("password"));
+        u.setEmail(resultSet.getString("email"));
+        u.setAge(resultSet.getInt("age"));
+        return u;
+    }
+
     public static void main(String[] args) {
         IUserDao userDaoImpl = new UserDaoImpl();
-        User user =  userDaoImpl.getEntityById(28);
-        user.setFirstName("Anatoliy");
-        user.setLastName("Tapolskiy");
-        userDaoImpl.updateEntity(user);
+//        User user =  userDaoImpl.getEntityById(12);
+//        System.out.println(user);
+//        user.setFirstName("Anatoliy");
+//        user.setLastName("Tapolskiy");
+//        userDaoImpl.updateEntity(user);
 //        userDaoImpl.setEntity(new User("Andrew", "Dallas", "+380931668949", "dallas192sm", "dash@gmail.com", 90));
 //        userDaoImpl.removeEntityById(19);
-
+        User userbuilder = new User.UserBuilder()
+                               .firstName("Cate")
+                               .lastName("Fedorenko")
+                               .age(23)
+                               .email("sdkofk@4jffp.com")
+                               .password("jfjoiri3939494")
+                               .phone("+380975457737")
+                               .build();
+        userDaoImpl.insertEntity(userbuilder);
         List<User> users = userDaoImpl.getAllUsers();
         System.out.println(users);
 
