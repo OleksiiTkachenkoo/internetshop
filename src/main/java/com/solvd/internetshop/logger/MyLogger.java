@@ -16,4 +16,8 @@ public class MyLogger {
         }
         return  logger;
     }
+
+    public <T> void  error(T t) {
+        System.out.println(t);
+    }
 }

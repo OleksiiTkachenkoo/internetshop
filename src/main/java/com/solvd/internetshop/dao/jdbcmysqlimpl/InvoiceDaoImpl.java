@@ -23,9 +23,11 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
         String query = "SELECT * FROM Invoice WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -49,9 +51,11 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
         String insertQuery = "INSERT INTO Invoice (invoiceDate, statusPaid) VALUE (?, ?)";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery)) {
+                     .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, invoice.getInvoiceDate());
             preparedStatement.setString(2, invoice.getStatusPaid());
@@ -69,8 +73,10 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
         String query = "UPDATE Invoice SET invoiceDate= ?, statusPaid= ?  WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, invoice.getInvoiceDate());
             preparedStatement.setString(2, invoice.getStatusPaid());
             preparedStatement.setInt(3, invoice.getId());
@@ -87,8 +93,10 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
         String query = "DELETE FROM Invoice WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
 
@@ -103,9 +111,11 @@ public class InvoiceDaoImpl implements IInvoiceDao {
 
         String query = "SELECT * FROM Invoice";
 
-        try(Connection connection = getApacheDbConnection();
+        try (
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
 
@@ -119,11 +129,11 @@ public class InvoiceDaoImpl implements IInvoiceDao {
     }
 
     private Invoice getInvoiceFromResultSet(ResultSet resultSet) throws SQLException {
-        Invoice i = new Invoice();
-        i.setId(resultSet.getInt("id"));
-        i.setInvoiceDate(resultSet.getString("invoiceDate"));
-        i.setStatusPaid(resultSet.getString("statusPaid"));
-        return i;
+        Invoice invoice = new Invoice();
+        invoice.setId(resultSet.getInt("id"));
+        invoice.setInvoiceDate(resultSet.getString("invoiceDate"));
+        invoice.setStatusPaid(resultSet.getString("statusPaid"));
+        return invoice;
     }
 
     public static void main(String[] args) {

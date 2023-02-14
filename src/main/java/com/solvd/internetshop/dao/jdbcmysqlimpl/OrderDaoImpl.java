@@ -78,7 +78,7 @@ public class OrderDaoImpl implements IOrderDao {
         String query = "UPDATE Order SET creationDate= ?, status= ?, " +
                 " description= ?, idUser= ?, idPayment= ? WHERE id= ?";
 
-        try(
+        try (
                 Connection connection = getApacheDbConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query)
         ) {
@@ -100,7 +100,7 @@ public class OrderDaoImpl implements IOrderDao {
 
         String query = "DELETE FROM Order WHERE id= ?";
 
-        try(
+        try (
                 Connection connection = getApacheDbConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query)
         ) {
@@ -117,7 +117,7 @@ public class OrderDaoImpl implements IOrderDao {
 
         String query = "SELECT * FROM Order";
 
-        try(
+        try (
                 Connection connection = getApacheDbConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query)
@@ -134,14 +134,14 @@ public class OrderDaoImpl implements IOrderDao {
     }
 
     private Order getOrderFromResultSet(ResultSet resultSet) throws SQLException {
-        Order o = new Order();
-        o.setId(resultSet.getInt("id"));
-        o.setCreationDate(resultSet.getString("creationDate"));
-        o.setStatus(resultSet.getString("status"));
-        o.setDescription(resultSet.getString("description"));
-        o.setIdUser(resultSet.getInt("idUser"));
-        o.setIdPayment(resultSet.getInt("idPayment"));
-        return o;
+        Order order = new Order();
+        order.setId(resultSet.getInt("id"));
+        order.setCreationDate(resultSet.getString("creationDate"));
+        order.setStatus(resultSet.getString("status"));
+        order.setDescription(resultSet.getString("description"));
+        order.setIdUser(resultSet.getInt("idUser"));
+        order.setIdPayment(resultSet.getInt("idPayment"));
+        return order;
     }
 
 }

@@ -76,7 +76,8 @@ public class ProductDaoImpl implements IProductDao {
         String query = "UPDATE Product SET firstName= ?, lastName= ?, " +
                 " phone= ?, password= ?, email= ?, age= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
+        try(
+            Connection connection = getApacheDbConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)
         ) {
             preparedStatement.setString(1, product.getTitle());
@@ -118,9 +119,11 @@ public class ProductDaoImpl implements IProductDao {
 
         String query = "SELECT * FROM Product";
 
-        try(Connection connection = getApacheDbConnection();
+        try(
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
 
@@ -134,16 +137,16 @@ public class ProductDaoImpl implements IProductDao {
     }
 
     private Product getProductFromResultSet(ResultSet resultSet) throws SQLException {
-        Product p = new Product();
-        p.setId(resultSet.getInt("id"));
-        p.setTitle(resultSet.getString("title"));
-        p.setPrice(resultSet.getInt("price"));
-        p.setCategories(resultSet.getString("categories"));
-        p.setIdUser(resultSet.getInt("idUser"));
-        p.setIdCart(resultSet.getInt("idCart"));
-        p.setAvailability(resultSet.getString("availability"));
-        p.setQuantity(resultSet.getInt("quantity"));
-        return p;
+        Product product = new Product();
+        product.setId(resultSet.getInt("id"));
+        product.setTitle(resultSet.getString("title"));
+        product.setPrice(resultSet.getInt("price"));
+        product.setCategories(resultSet.getString("categories"));
+        product.setIdUser(resultSet.getInt("idUser"));
+        product.setIdCart(resultSet.getInt("idCart"));
+        product.setAvailability(resultSet.getString("availability"));
+        product.setQuantity(resultSet.getInt("quantity"));
+        return product;
     }
 
     public static void main(String[] args) {

@@ -22,9 +22,11 @@ public class AddressDaoImpl implements IAddressDao {
 
         String query = "SELECT * FROM Address WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -50,9 +52,11 @@ public class AddressDaoImpl implements IAddressDao {
                 "INSERT INTO Address (country, city, street, " +
                         "apartment, idUser, idShipment) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery)) {
+                     .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, address.getCountry());
             preparedStatement.setString(2, address.getCity());
@@ -74,8 +78,10 @@ public class AddressDaoImpl implements IAddressDao {
         String query = "UPDATE Address SET country= ?, city= ?, street= ?, " +
                 " apartment= ?, idUser= ?, idShipment= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, address.getCountry());
             preparedStatement.setString(2, address.getCity());
             preparedStatement.setString(3, address.getStreet());
@@ -97,8 +103,10 @@ public class AddressDaoImpl implements IAddressDao {
 
         String query = "DELETE FROM Address WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
 
@@ -113,9 +121,11 @@ public class AddressDaoImpl implements IAddressDao {
 
         String query = "SELECT * FROM Address";
 
-        try(Connection connection = getApacheDbConnection();
+        try (
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
 
@@ -129,15 +139,15 @@ public class AddressDaoImpl implements IAddressDao {
     }
 
     private Address getAddressFromResultSet(ResultSet resultSet) throws SQLException {
-        Address a = new Address();
-        a.setId(resultSet.getInt("id"));
-        a.setCountry(resultSet.getString("country"));
-        a.setCity(resultSet.getString("city"));
-        a.setStreet(resultSet.getString("street"));
-        a.setApartment(resultSet.getString("apartment"));
-        a.setIdUser(resultSet.getInt("idUser"));
-        a.setIdShipment(resultSet.getInt("idShipment"));
-        return a;
+        Address address = new Address();
+        address.setId(resultSet.getInt("id"));
+        address.setCountry(resultSet.getString("country"));
+        address.setCity(resultSet.getString("city"));
+        address.setStreet(resultSet.getString("street"));
+        address.setApartment(resultSet.getString("apartment"));
+        address.setIdUser(resultSet.getInt("idUser"));
+        address.setIdShipment(resultSet.getInt("idShipment"));
+        return address;
     }
 
     public static void main(String[] args) {

@@ -71,8 +71,10 @@ public class AccountDaoImpl implements IAccountDao {
 
         String query = "UPDATE Account SET idUser= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, account.getIdUser());
             preparedStatement.setInt(2, account.getId());
             preparedStatement.executeUpdate();
@@ -88,7 +90,7 @@ public class AccountDaoImpl implements IAccountDao {
 
         String query = "DELETE FROM Account WHERE id= ?";
 
-        try(
+        try (
             Connection connection = getApacheDbConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)
         ) {
@@ -105,7 +107,7 @@ public class AccountDaoImpl implements IAccountDao {
 
         String query = "SELECT * FROM Account";
 
-        try(
+        try (
             Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query)
@@ -123,11 +125,11 @@ public class AccountDaoImpl implements IAccountDao {
     }
 
     private Account getAccountFromResultSet(ResultSet resultSet) throws SQLException {
-        Account a = new Account();
-        a.setId(resultSet.getInt("id"));
-        a.setIdUser(resultSet.getInt("idUser"));
-        a.setIdUserRole(resultSet.getInt("idUserRole"));
-        return a;
+        Account account = new Account();
+        account.setId(resultSet.getInt("id"));
+        account.setIdUser(resultSet.getInt("idUser"));
+        account.setIdUserRole(resultSet.getInt("idUserRole"));
+        return account;
     }
 
     public static void main(String[] args) {

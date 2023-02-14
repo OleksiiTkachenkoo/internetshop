@@ -24,9 +24,11 @@ public class ShipmentDaoImpl implements IShipmentDao {
     public Shipment getEntityById(int id) {
         String query = "SELECT * FROM Shipment WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -51,9 +53,11 @@ public class ShipmentDaoImpl implements IShipmentDao {
         String insertQuery =
                 "INSERT INTO Shipment (status, transportName, date) VALUES (?, ?, ?)";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery)) {
+                     .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, shipment.getStatus());
             preparedStatement.setString(2, shipment.getTransportName());
@@ -71,8 +75,10 @@ public class ShipmentDaoImpl implements IShipmentDao {
 
         String query = "UPDATE Shipment SET status= ?, transportName= ?, date= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, shipment.getStatus());
             preparedStatement.setString(2, shipment.getTransportName());
             preparedStatement.setString(3, shipment.getDate());
@@ -91,8 +97,10 @@ public class ShipmentDaoImpl implements IShipmentDao {
 
         String query = "DELETE FROM Shipment WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
 
@@ -107,9 +115,11 @@ public class ShipmentDaoImpl implements IShipmentDao {
 
         String query = "SELECT * FROM Shipment";
 
-        try(Connection connection = getApacheDbConnection();
+        try(
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
 
@@ -124,12 +134,12 @@ public class ShipmentDaoImpl implements IShipmentDao {
     }
 
     private Shipment getShipmentFromResultSet(ResultSet resultSet) throws SQLException {
-        Shipment s = new Shipment();
-        s.setId(resultSet.getInt("id"));
-        s.setStatus(resultSet.getString("status"));
-        s.setTransportName(resultSet.getString("transportName"));
-        s.setDate(resultSet.getString("date"));
-        return s;
+        Shipment shipment = new Shipment();
+        shipment.setId(resultSet.getInt("id"));
+        shipment.setStatus(resultSet.getString("status"));
+        shipment.setTransportName(resultSet.getString("transportName"));
+        shipment.setDate(resultSet.getString("date"));
+        return shipment;
     }
 
     public static void main(String[] args) {

@@ -23,11 +23,11 @@ public class PropertiesUtil {
 
     public static void loadProperties() {
         try (FileInputStream f =
-                     new FileInputStream("./src/main/resources/dBConnection.properties")) {
+                     new FileInputStream("./src/main/resources/dbConnection.properties")) {
             p.load(f);
-            URL = p.getProperty("dBConnection.url");
-            USER_NAME = p.getProperty("dBConnection.username");
-            PASSWORD = p.getProperty("dBConnection.password");
+            URL = p.getProperty("dbConnection.url");
+            USER_NAME = p.getProperty("dbConnection.username");
+            PASSWORD = p.getProperty("dbConnection.password");
         } catch (IOException e) {
             myLogger().error(e);
         }

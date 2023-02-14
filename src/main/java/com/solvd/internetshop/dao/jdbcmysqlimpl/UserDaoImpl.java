@@ -138,15 +138,15 @@ public class UserDaoImpl implements IUserDao {
     }
 
     private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User u = new User();
-        u.setId(resultSet.getInt("id"));
-        u.setFirstName(resultSet.getString("firstName"));
-        u.setLastName(resultSet.getString("lastName"));
-        u.setPhone(resultSet.getString("phone"));
-        u.setPassword(resultSet.getString("password"));
-        u.setEmail(resultSet.getString("email"));
-        u.setAge(resultSet.getInt("age"));
-        return u;
+        User user = new User();
+        user.setId(resultSet.getInt("id"));
+        user.setFirstName(resultSet.getString("firstName"));
+        user.setLastName(resultSet.getString("lastName"));
+        user.setPhone(resultSet.getString("phone"));
+        user.setPassword(resultSet.getString("password"));
+        user.setEmail(resultSet.getString("email"));
+        user.setAge(resultSet.getInt("age"));
+        return user;
     }
 
     public static void main(String[] args) {

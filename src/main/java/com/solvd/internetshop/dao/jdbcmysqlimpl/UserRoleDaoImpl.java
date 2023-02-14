@@ -26,9 +26,11 @@ public class UserRoleDaoImpl implements IUserRoleDao {
 
         String query = "SELECT * FROM UserRole WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
@@ -41,6 +43,7 @@ public class UserRoleDaoImpl implements IUserRoleDao {
             return userRole;
 
         } catch (SQLException e) {
+            myLogger().error(e);
             throw new RuntimeException(e);
         }
 
@@ -52,9 +55,11 @@ public class UserRoleDaoImpl implements IUserRoleDao {
         String insertQuery =
                 "INSERT INTO UserRole (role) VALUE (?)";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery)) {
+                     .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, userRole.getRole());
             preparedStatement.executeUpdate();
@@ -70,8 +75,10 @@ public class UserRoleDaoImpl implements IUserRoleDao {
 
         String query = "UPDATE UserRole SET role= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, userRole.getRole());
             preparedStatement.setInt(2, userRole.getId());
             preparedStatement.executeUpdate();
@@ -87,8 +94,10 @@ public class UserRoleDaoImpl implements IUserRoleDao {
 
         String query = "DELETE FROM UserRole WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try(
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
 
@@ -103,9 +112,11 @@ public class UserRoleDaoImpl implements IUserRoleDao {
 
         String query = "SELECT * FROM UserRole";
 
-        try(Connection connection = getApacheDbConnection();
+        try(
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
 
@@ -119,10 +130,10 @@ public class UserRoleDaoImpl implements IUserRoleDao {
     }
 
     private UserRole getUserRoleFromResultSet(ResultSet resultSet) throws SQLException {
-        UserRole u = new UserRole();
-        u.setId(resultSet.getInt("id"));
-        u.setRole(resultSet.getString("role"));
-        return u;
+        UserRole userRole = new UserRole();
+        userRole.setId(resultSet.getInt("id"));
+        userRole.setRole(resultSet.getString("role"));
+        return userRole;
     }
 
     public static void main(String[] args) {

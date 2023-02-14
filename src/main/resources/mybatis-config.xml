@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <properties resource="dBConnection.properties"/>
+    <properties resource="dbConnection.properties"/>
     <typeAliases>
         <typeAlias type="com.solvd.internetshop.model.User" alias="User"/>
         <typeAlias type="com.solvd.internetshop.model.UserRole" alias="UserRole"/>
@@ -14,10 +14,10 @@
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="${dBConnection.driverClassName}"/>
-                <property name="url" value="${dBConnection.url}"/>
-                <property name="username" value="${dBConnection.username}"/>
-                <property name="password" value="${dBConnection.password}"/>
+                <property name="driver" value="${dbConnection.driverClassName}"/>
+                <property name="url" value="${dbConnection.url}"/>
+                <property name="username" value="${dbConnection.username}"/>
+                <property name="password" value="${dbConnection.password}"/>
             </dataSource>
         </environment>
     </environments>

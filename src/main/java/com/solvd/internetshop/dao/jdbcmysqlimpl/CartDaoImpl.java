@@ -24,9 +24,11 @@ public class CartDaoImpl implements ICartDao {
 
         String query = "SELECT * FROM Cart WHERE id = ?";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(query)) {
+                     .prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
@@ -51,9 +53,11 @@ public class CartDaoImpl implements ICartDao {
                 "INSERT INTO Cart (productItem, dateAdd)" +
                         " VALUES (?, ?)";
 
-        try (Connection connection = getApacheDbConnection();
+        try (
+             Connection connection = getApacheDbConnection();
              PreparedStatement preparedStatement = connection
-                     .prepareStatement(insertQuery)) {
+                     .prepareStatement(insertQuery)
+        ) {
 
             preparedStatement.setString(1, cart.getProductItem());
             preparedStatement.setString(2, cart.getDateAdd());
@@ -68,8 +72,10 @@ public class CartDaoImpl implements ICartDao {
     public void updateEntity(Cart cart) {
         String query = "UPDATE Cart SET productItem= ?, dateAdd= ? WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setString(1, cart.getProductItem());
             preparedStatement.setString(2, cart.getDateAdd());
             preparedStatement.setInt(3, cart.getId());
@@ -85,8 +91,10 @@ public class CartDaoImpl implements ICartDao {
 
         String query = "DELETE FROM Cart WHERE id= ?";
 
-        try(Connection connection = getApacheDbConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (
+            Connection connection = getApacheDbConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
 
@@ -100,9 +108,11 @@ public class CartDaoImpl implements ICartDao {
 
         String query = "SELECT * FROM Cart";
 
-        try(Connection connection = getApacheDbConnection();
+        try (
+            Connection connection = getApacheDbConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query)) {
+            ResultSet resultSet = statement.executeQuery(query)
+        ) {
 
             while (resultSet.next()) {
 
@@ -116,11 +126,11 @@ public class CartDaoImpl implements ICartDao {
     }
 
     private Cart getCartFromResultSet(ResultSet resultSet) throws SQLException {
-        Cart c = new Cart();
-        c.setId(resultSet.getInt("id"));
-        c.setProductItem(resultSet.getString("productItem"));
-        c.setDateAdd(resultSet.getString("dateAdd"));
-        return c;
+        Cart cart = new Cart();
+        cart.setId(resultSet.getInt("id"));
+        cart.setProductItem(resultSet.getString("productItem"));
+        cart.setDateAdd(resultSet.getString("dateAdd"));
+        return cart;
     }
 
     public static void main(String[] args) {
